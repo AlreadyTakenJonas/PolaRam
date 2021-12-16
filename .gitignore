@@ -4,5 +4,7 @@ res/*
 log/*
 !log/.gitkeep
 
+# conda environment
+conda_env/
 
 __pycache__/
