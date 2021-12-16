@@ -1,6 +1,8 @@
 # output, input and log files
-res/
-log/
+res/*
+!res/.gitkeep
+log/*
+!log/.gitkeep
 
 
 __pycache__/
