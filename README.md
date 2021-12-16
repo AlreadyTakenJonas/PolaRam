@@ -9,6 +9,7 @@ The sub-program carrying out the simulation is called `polaram simulate`. There 
 Table of Contents
 =================
    * [Raman Scattering Of Linear Polarised Light With PolaRam](#raman-scattering-of-linear-polarised-light-with-polaram)
+   * [Installation](#installation)
    * [Known Bugs](#known-bugs)
    * [simulate: Simulation Of Raman Scattering Of Linear Polarised Light](#simulate-simulation-of-raman-scattering-of-linear-polarised-light)
       * [Usage](#usage)
@@ -22,6 +23,13 @@ Table of Contents
       * [Usage](#usage-2)
       * [The Input File](#the-input-file-1)
    * [Supplementary code: utilities and SetupDecoder](#supplementary-code-utilities-and-setupdecoder)
+
+# Installation
+To install the program you need to donwload the repository and install the dependencies listed in `conda_env.yml`. This can be easily done by creating an anaconda environment from this file. In order to do so run `conda env create -n PolaRam -f /PATH/TO/YOUR/INSTALLATION/conda_env.yml`. How to install anaconda is explained [here](https://docs.anaconda.com/anaconda/install/index.html). You can install the dependencies manually, of course.
+
+When using anaconda, you have to switch to the anaconda environment to be able to use the installed dependencies. Do so with `conda activate PolaRam`. After that run the program as described below. More on the usage of anaconda, can be found in their [docs](https://docs.anaconda.com/).
+
+To test your installation of PolaRam and to make sure the program runs properly you might want to run the command `python3 -m unittest` in the directory you have PolaRam installed in.
 
 # Known Bugs
  * There is a bug in the external command line argument parser argparse: You can't enter negative numbers in scientific notations (like -1e3). The number will be mistaken for a command line flag. However, writing -1000 is accepted by argparse.
