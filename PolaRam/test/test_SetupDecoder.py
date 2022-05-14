@@ -4,7 +4,7 @@
 import unittest
 
 # Import class that shall be tested and create an instance of it
-from SetupDecoder import SetupDecoder
+from ..SetupDecoder import SetupDecoder
 SetupDecoder = SetupDecoder()
 
 #

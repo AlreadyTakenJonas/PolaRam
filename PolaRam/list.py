@@ -14,7 +14,7 @@ from inspect import signature
 #
 #   INTERNAL MODULES
 #
-import SetupDecoder as SetDec
+from . import SetupDecoder as SetDec
 
 def main():
     """

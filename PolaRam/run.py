@@ -13,21 +13,17 @@ import pathlib
 # Math stuff
 import numpy as np
 
-# Get current version from git tags
-from git import Repo
-# Execute "git describe --tags" in the folder of the currently running file
-__version__ =  Repo( str(pathlib.Path(__file__).parents[0]) ).git.execute(["git", "describe", "--tags"])
-
 #
 #   INTERNAL MODULES
 #
-import simulate, list, convert, extract
-import utilities as util
+from . import simulate, list, convert, extract
+from . import utilities as util
+from .version import __version__
 
 #
 #   START OF PROGRAM EXECUTION AS MAIN PROGRAM
 #
-if __name__ == "__main__":
+def main():
 
     #
     #   CREATE COMMAND LINE INTERFACE
@@ -54,7 +50,7 @@ if __name__ == "__main__":
     # Add logfile (default defined)
     sap_simulate.add_argument("-l", "--log",
                               required = False,
-                              default = str(pathlib.Path(__file__).parent) + "/log/muellersimulation.log",
+                              default = str(pathlib.Path(__file__).parent) + "/../log/muellersimulation.log",
                               help = "defines path and name of a custom .log file. Default=PROGRAMPATH/log/muellersimulation.log",
                               dest = "logfile",
                               type = util.filepath)
@@ -65,7 +61,7 @@ if __name__ == "__main__":
     # Add input file for raman tensors
     sap_simulate.add_argument("-m", "--matrix",
                               required = False,
-                              default = str(pathlib.Path(__file__).parent) + "/unitmatrix.txt",
+                              default = str(pathlib.Path(__file__).parent) + "/../data/unitmatrix.txt",
                               dest = "matrixfile",
                               help = "text file containing the raman matrices of the sample in the labratory cordinate system. Details are given in the README.",
                               type = util.filepath)
@@ -73,7 +69,7 @@ if __name__ == "__main__":
     sap_simulate.add_argument("-o", "--output",
                               help = "path to output file. Default=PROGRAMMPATH/res/muellersimulation.txt",
                               required = False,
-                              default = str(pathlib.Path(__file__).parent) + "/res/muellersimulation.txt",
+                              default = str(pathlib.Path(__file__).parent) + "/../res/muellersimulation.txt",
                               dest = "outputfile",
                               type = util.filepath)
     # Add argument that will be written as comment in the output file
@@ -123,7 +119,7 @@ if __name__ == "__main__":
     # Add logfile (copied from sap_simulate)
     sap_list.add_argument("-l", "--log",
                               required = False,
-                              default = str(pathlib.Path(__file__).parent) + "/log/muellersimulation.log",
+                              default = str(pathlib.Path(__file__).parent) + "/../log/muellersimulation.log",
                               # argparse.SUPPRESS hides this argument in the help text
                               help = argparse.SUPPRESS,
                               dest = "logfile",
@@ -150,7 +146,7 @@ if __name__ == "__main__":
     # Add logfile (default defined)
     sap_convert.add_argument("-l", "--log",
                              required = False,
-                             default = str(pathlib.Path(__file__).parent) + "/log/convertRamanTensor.log",
+                             default = str(pathlib.Path(__file__).parent) + "/../log/convertRamanTensor.log",
                              help = "defines path and name of a custom .log file. Default=PROGRAMPATH/log/convertRamanTensor.log",
                              dest = "logfile",
                              type = util.filepath)
@@ -169,7 +165,7 @@ if __name__ == "__main__":
     sap_convert.add_argument("-o", "--output",
                              help = "path to output file. Default=PROGRAMMPATH/res/labratoryMuellerMatrix.txt",
                              required = False,
-                             default = str(pathlib.Path(__file__).parent) + "/res/labratoryMuellerMatrix.txt",
+                             default = str(pathlib.Path(__file__).parent) + "/../res/labratoryMuellerMatrix.txt",
                              dest = "outputfile",
                              type = util.filepath)
     # Add argument that will be written as comment in the output file
@@ -213,7 +209,7 @@ if __name__ == "__main__":
     # Add logfile (default defined)
     sap_extract.add_argument("-l", "--log",
                              required = False,
-                             default = str(pathlib.Path(__file__).parent) + "/log/extractGaussianTensor.log",
+                             default = str(pathlib.Path(__file__).parent) + "/../log/extractGaussianTensor.log",
                              help = "defines path and name of a custom .log file. Default=PROGRAMPATH/log/extractGaussianTensor.log",
                              dest = "logfile",
                              type = util.filepath)
@@ -225,7 +221,7 @@ if __name__ == "__main__":
     sap_extract.add_argument("-o", "--output",
                              help = "path to output file. Default=PROGRAMPATH/res/molecularTensor.txt",
                              required = False,
-                             default = str(pathlib.Path(__file__).parent) + "/res/molecularTensor.txt",
+                             default = str(pathlib.Path(__file__).parent) + "/../res/molecularTensor.txt",
                              dest = "outputfile",
                              type = util.filepath)
     # Add argument that will be written as comment in the output file

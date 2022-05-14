@@ -33,7 +33,7 @@ from tqdm import tqdm
 #
 #   INTERNAL MODULES
 #
-import utilities as util
+from . import utilities as util
 
 #
 #   FUNCTION TO BE CALLED BY PARALLEL SUBPROCESSES
@@ -186,7 +186,7 @@ def main(cliArgs):
             try:
                 eigenvalues = np.linalg.eigvals(initial["matrix"])
 
-            except LinAlgError as e:
+            except np.linalg.LinAlgError as e:
                 # Eigenvalues do not converge. Log this issue and exit execution.
                 log.critical("The eigenvalue computation of the input raman tensor '" + initial["head"] + "' does not converge. Unable to validate monte-carlo-simulation!")
                 log.critical("TERMINATE EXECUTION.")

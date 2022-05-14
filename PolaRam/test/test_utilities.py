@@ -7,7 +7,7 @@ import unittest
 import types
 
 # Import class that shall be tested and create an instance of it
-import utilities as util
+from .. import utilities as util
 
 #
 #   EXTERNAL LIBARIES

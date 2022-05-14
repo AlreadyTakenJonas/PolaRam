@@ -8,3 +8,4 @@ log/*
 conda_env/
 
 __pycache__/
+PolaRam.egg*
