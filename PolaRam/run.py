@@ -103,12 +103,6 @@ def main():
                               action = util.stokesvectorlist,
                               help = "the initial polarisation state of the simulation, encoded as stokes parameters. It is possible to pass more than one stokes vector by using the flag multiple times. Default=1 1 0 0",
                               default = [np.array([1., 1., 0., 0.])] )
-    sap_simulate.add_argument("-u", "--unpolarised-scattering",
-                              dest = "allowUnpolarisedRamanScattering",
-                              action = "store_true",
-                              default = False,
-                              required = False,
-                              help = "if enabled unpolarised stokes vectors won't cause an exception when simulating the raman scattering. Use this option with care! Enabling this flag makes only sense in some specific cases. See the README for details.")
 
 	# Create list command
     sap_list = sap.add_parser("list",

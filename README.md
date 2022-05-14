@@ -97,12 +97,6 @@ optional arguments:
                         encoded as stokes parameters. It is possible to pass
                         more than one stokes vector by using the flag multiple
                         times. Default=1 1 0 0
-  -u, --unpolarised-scattering
-                        if enabled unpolarised stokes vectors won't cause an
-                        exception when simulating the raman scattering. Use
-                        this option with care! Enabling this flag makes only
-                        sense in some specific cases. See the README for
-                        details.
 ```
 The simulation will print its results in a file and on the screen. The file can be specified by the `-o/--output` option. The `-lsr/--laser` flag defines the initial polarisation state of the simulation. Using the flag multiple times allows you to run multiple simulations at the same time. The polarisation state is defined by the four stokes parameters of the stokes vector. Only physically valid vectors will be accepted. See the literature or google for an explanation on how stokes vectors work.
 There is a bug in the external command line argument parser argparse: You can't enter negative numbers in scientific notations (like -1e3). The number will be mistaken for a command line flag. However, writing -1000 is accepted by argparse.
