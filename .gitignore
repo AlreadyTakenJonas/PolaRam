@@ -8,3 +8,7 @@ log/*
 conda_env/
 
 __pycache__/
+
+# Building the package
+PolaRam.egg*
+build/*

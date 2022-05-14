@@ -4,7 +4,7 @@ The program PolaRam simulates the behaviour of polarised light with the mueller 
 
 The program needs a file with instructions and a file with the raman tensors of the sample. The instructions file describes the experimental setup that shall be simulated. The syntax is assembly like and described below. The raman tensors are stored in a seperate file with a specific format and coordinate system also described below.
 
-The sub-program carrying out the simulation is called `polaram simulate`. There are two more sub-programs helping with data and file conversion: `polaram convert` and `polaram extract`. More information below.
+The sub-program carrying out the simulation is called `simulate`. There are two more sub-programs helping with data and file conversion: `convert` and `extract`. More information below.
 
 Table of Contents
 =================
@@ -25,11 +25,16 @@ Table of Contents
    * [Supplementary code: utilities and SetupDecoder](#supplementary-code-utilities-and-setupdecoder)
 
 # Installation
-To install the program you need to donwload the repository and install the dependencies listed in `conda_env.yml`. This can be easily done by creating an anaconda environment from this file. In order to do so run `conda env create -n PolaRam -f /PATH/TO/YOUR/INSTALLATION/conda_env.yml`. How to install anaconda is explained [here](https://docs.anaconda.com/anaconda/install/index.html). You can install the dependencies manually, of course.
+This package can be build and installed via pip. Go to your program folder and run
+```
+python3 setup.py build
+python3 -m pip install .
+```
+. I would suggest you install the package in a seperate anaconda environment. This prevents the dependencies from this package to interfere with your the dependencies of your other python packages. The anaconda environment is no necessecary for this program to work, thought. How to install anaconda is explained [here](https://docs.anaconda.com/anaconda/install/index.html).
 
-When using anaconda, you have to switch to the anaconda environment to be able to use the installed dependencies. Do so with `conda activate PolaRam`. After that run the program as described below. More on the usage of anaconda, can be found in their [docs](https://docs.anaconda.com/).
+When using anaconda, you have to switch to the anaconda environment to be able to install and use PolaRam. More on the usage of anaconda, can be found in their [docs](https://docs.anaconda.com/).
 
-To test your installation of PolaRam and to make sure the program runs properly you might want to run the command `python3 -m unittest` in the directory you have PolaRam installed in.
+To test your installation of PolaRam and to make sure the program runs properly you might want to run the command `python3 -m PolaRam.test`.
 
 # Known Bugs
  * There is a bug in the external command line argument parser argparse: You can't enter negative numbers in scientific notations (like -1e3). The number will be mistaken for a command line flag. However, writing -1000 is accepted by argparse.
@@ -38,11 +43,11 @@ To test your installation of PolaRam and to make sure the program runs properly 
 
 The simulation works by describing the state of the polarisation as a four dimensional stokes vector *S* and every optical element and the sample as 4x4 mueller matrices *M*. Applying *M* to *S* will give the new state of the system when the light interacts with the optical element. Every command in the input file descibes a mueller matrix that will be applied to the system one after another.
 
-The simulation takes the raman mueller matrix describing the sample as 4x4 matrix. However, this matrix is unknown, but the raman tensor can be calculated or measured. The raman tensor is a 3x3 matrix and therefore not compatible with the mueller formalism. To solve this problem the raman tensor will be transformed into a mueller matrix. The `convert` subprogram will handle this transformation. Due to the mathematics behind the transformation the program is not able to describe the raman scattering process for light that is circular polarised or with a polarisation grade below one. In some special cases does this method apply on partially linear or unpolarised Stokes vectors. The transformation and its assumptions will be explained in a seperate [pdf-file](./ramanMuellerMatrix.pdf).
+The simulation takes the raman mueller matrix describing the sample as 4x4 matrix. However, this matrix is unknown, but the raman tensor can be calculated or measured. The raman tensor is a 3x3 matrix and therefore not compatible with the mueller formalism. To solve this problem the raman tensor will be transformed into a mueller matrix. The `convert` subprogram will handle this transformation. Due to the mathematics behind the transformation the program is not able to describe the raman scattering process for light that is circular polarised or with a polarisation grade below one. In some special cases does this method apply on partially linear or unpolarised Stokes vectors. The transformation and its assumptions will be explained in a seperate [pdf-file](./info/ramanMuellerMatrix.pdf).
 It is possible to pass multiple raman mueller matrices to the simulation at once. There is a raman tensor for every vibrational mode of the sample and all of them can be simulated in parallel. Make sure to give each raman mueller matrix a describtive title in the raman mueller matrix file. More details about the input files are given below.
 
 This simulation is only looking at raman scattering in transmission. Circular polarisation can't be simulated in combination with the raman scattering process. All other optical elements do support circular polarisation.
-These assumptions are the basis of the raman-tensor-to-mueller-matrix-conversion described in a seperate [pdf-file](./ramanMuellerMatrix.pdf). Details and definitions of the coordinate systems are also given in the seperate [pdf-file](./ramanMuellerMatrix.pdf).
+These assumptions are the basis of the raman-tensor-to-mueller-matrix-conversion described in a seperate [pdf-file](./info/ramanMuellerMatrix.pdf). Details and definitions of the coordinate systems are also given in the seperate [pdf-file](./info/ramanMuellerMatrix.pdf).
 
 In order to simulate a solution of a molecule and not only a single molecule, use the `convert` command. It derives a mean raman mueller matrix for molecules in solution from the raman tensor of a single molecule. The raman tensor for the single molecule can be computed by quantum calculation programs like Gaussian. Details are given in the sections about the `convert` sub-program.
 
@@ -50,7 +55,7 @@ In order to simulate a solution of a molecule and not only a single molecule, us
 
 The simulation is started by typing `polaram simulate PATH_TO_INPUT_FILE`. The command `polaram simulate -h` echos a help text. This command prints the following output:
 ```
-$ polaram simulate -h
+$ python3 -m PolaRam simulate -h
 usage: polaram simulate [-h] [-v] [-l LOGFILE] [-m MATRIXFILE] [-o OUTPUTFILE]
                         [-c [COMMENT [COMMENT ...]]] [-a] [-r] [-s]
                         [-lsr LASER LASER LASER LASER] [-u]
@@ -105,7 +110,7 @@ The simulation will print its results in a file and on the screen. The file can 
 
 ![matrix](http://www.sciweavers.org/tex2img.php?eq=%20%5Cbegin%7Bpmatrix%7D%20m_%7B11%7D%20%26%200%20%26%200%20%26%200%20%5C%5C%200%20%26%20m_%7B22%7D%20%26%20m_%7B23%7D%20%26%200%20%5C%5C%200%20%26%20m_%7B32%7D%20%26%20m_%7B33%7D%20%26%200%20%5C%5C%200%20%26%200%20%26%200%20%26%200%20%5Cend%7Bpmatrix%7D&bc=White&fc=Black&im=png&fs=12&ff=arev&edit=0),
 
-which is usually the case for measuring geometries of 0° or 180°, the `-u` flag may be set. In the current version assumes `polaram convert` such a measuring geometry. Therefore you should be good. The math is described in the seperate [pdf-file](./ramanMuellerMatrix.pdf). The fact that this works for these measuring geometries was shown by Giudicotti (Giudicotti, L., & Pasqualotto, R. (2015). Rotational Raman scattering as a source of polarized radiation for the calibration of polarization-based Thomson scattering. Plasma Physics and Controlled Fusion, 57(3), 35001. https://doi.org/10.1088/0741-3335/57/3/035001) for rotational raman scattering of diatomic gases.
+which is usually the case for measuring geometries of 0° or 180°, the `-u` flag may be set. In the current version assumes `convert` such a measuring geometry. Therefore you should be good. The math is described in the seperate [pdf-file](./info/ramanMuellerMatrix.pdf). The fact that this works for these measuring geometries was shown by Giudicotti (Giudicotti, L., & Pasqualotto, R. (2015). Rotational Raman scattering as a source of polarized radiation for the calibration of polarization-based Thomson scattering. Plasma Physics and Controlled Fusion, 57(3), 35001. https://doi.org/10.1088/0741-3335/57/3/035001) for rotational raman scattering of diatomic gases.
 There is a bug in the external command line argument parser argparse: You can't enter negative numbers in scientific notations (like -1e3). The number will be mistaken for a command line flag. However, writing -1000 is accepted by argparse.
 
 ## The Input Files
@@ -114,7 +119,7 @@ There are two input file the simulation needs: the input file and the raman tens
 
 ### Instruction File
 
-The instruction file is structured in lines. Every command occupies one line and contains the encoded instruction and its parameters. It describes the labratory setup with all optical elements and the sample. Every instruction needs to be written in its own line and the instruction and its arguments are seperated by a spaces. Comments start with `#` and can be placed anywhere in the instruction file. Every character between `#` and the next line will be ignored. The following instructions are implemented. A list of all implemented instructions can be obtained by running `polaram list`.
+The instruction file is structured in lines. Every command occupies one line and contains the encoded instruction and its parameters. It describes the labratory setup with all optical elements and the sample. Every instruction needs to be written in its own line and the instruction and its arguments are seperated by a spaces. Comments start with `#` and can be placed anywhere in the instruction file. Every character between `#` and the next line will be ignored. The following instructions are implemented. A list of all implemented instructions can be obtained by running `python -m PolaRam list`.
 
 instruction | optical element             | number of arguments | describtion
 :----------:|:---------------------------:|:-------------------:|:----------:
@@ -123,7 +128,7 @@ instruction | optical element             | number of arguments | describtion
 `QWP θ`     | quarter wave plate          | 1                   | Shortcut for `GLR θ 90`.
 `LHP θ`     | linear horizontal polariser | 1                   | This polariser accepts the optional angle θ in degrees. θ rotates the linear polariser in the x-y-plane of the labratory coordinate system counter-clockwise. θ defaults to zero and aligns the polariser with the x-axis of the labratory coordinate system.
 `LVP θ`     | linear vertical polariser   | 1                   | This polariser accepts the optional angle θ in degrees. θ rotates the linear polariser in the x-y-plane of the labratory coordinate system counter-clockwise. θ defaults to zero and aligns the polariser with the y-axis of the labratory coordinate system.
-`SMP`       | raman scattering sample     | 0                   | This command will cause the simulation program to use the raman mueller matrices, given via CLI, in the next simulation step. If none is given, the unit matrix will be read from the file `PolaRam/unitmatrix.txt`. This instruction is not compatible with circular polarised light and light with a polarisation grade below one (in most cases). For more details on the math behind it see the seperate [pdf-file](./ramanMuellerMatrix.pdf).
+`SMP`       | raman scattering sample     | 0                   | This command will cause the simulation program to use the raman mueller matrices, given via CLI, in the next simulation step. If none is given, the unit matrix will be read from the file `PolaRam/unitmatrix.txt`. This instruction is not compatible with circular polarised light and light with a polarisation grade below one (in most cases). For more details on the math behind it see the seperate [pdf-file](./info/ramanMuellerMatrix.pdf).
 `FLR t`     | attenuating filter          | 1                   | The attenuating filter accepts the transmission t as argument. t must be a value between zero and one (including both) and describes the percentage of light that can pass the filter.
 `NOP`       | no operation                | 0                   | Returns unity matrix.
 `DPL p`     | ideal depolariser           | 1                   | The depolariser accepts one argument p. It is the percentage of light that stays polarised after interacting with the depolariser. The argument p may take values between 0 and 1; including both.
@@ -165,15 +170,15 @@ The subprogram `convert` will create such a file. `convert` uses 3x3 raman tenso
 
 The sub-command `convert` will run a Monte-Carlo-Simulation on a list of 3x3 matrices given via CLI. The purpose of the simulation is the conversion of a raman tensor from the molecular coordinate system - which can be calculated by Gaussian and similar programs - into the labratory coordinate system of the Mueller-Simulation the `simulate` program performs. In addition to the coordinate system conversion, the program will convert the raman tensors into the mueller matrix formalism. It is assumed that the sample is in a solved state so that each molecule is free to rotate. The effective raman mueller matrix incoming light will experience is therefore the mean of all possible rotations of the molecular raman tensor. The Monte-Carlo-Simulation will calculate this mean by rotating the molecular raman tensor by random angles.
 
-There are a few things to keep in mind, to understand the way this simulation is implemented: The random rotations are implemented with James Arvo's Algorithm "Fast Random Rotation Matrices" to ensure a uniform distribution of the rotations. The math is described in his [paper](./jamesArvoAlgorithm.pdf). Furthermore it is not possible to calculate the mean raman tensor of all possible rotations. The raman scattering process is linear and therefore a mean raman tensor should describe a solution, but the simulation and the matrix validation (described in the next paragraph) look at the intensity of the light, not the electrical field vectors. The relationship between electrical fiel and intensity is not linear and therefore is a mean of the raman tensors a bad describtion of a raman active solution. That is the reason why the raman tensor will be converted into a mueller matrix after its been rotated randomly. The mueller matrix are defined by the light intensities and not the electrical fields. The raman scattering process described in the mueller formalism is linear; even when considering the light's intensity. Therefore does the mean over all mueller matrices describe the behaviour of a raman active solution correctly.
+There are a few things to keep in mind, to understand the way this simulation is implemented: The random rotations are implemented with James Arvo's Algorithm "Fast Random Rotation Matrices" to ensure a uniform distribution of the rotations. The math is described in his [paper](./info/jamesArvoAlgorithm.pdf). Furthermore it is not possible to calculate the mean raman tensor of all possible rotations. The raman scattering process is linear and therefore a mean raman tensor should describe a solution, but the simulation and the matrix validation (described in the next paragraph) look at the intensity of the light, not the electrical field vectors. The relationship between electrical fiel and intensity is not linear and therefore is a mean of the raman tensors a bad describtion of a raman active solution. That is the reason why the raman tensor will be converted into a mueller matrix after its been rotated randomly. The mueller matrix are defined by the light intensities and not the electrical fields. The raman scattering process described in the mueller formalism is linear; even when considering the light's intensity. Therefore does the mean over all mueller matrices describe the behaviour of a raman active solution correctly.
 
 The validation of the monte-carlo-simulation is done by comparing the depolarisation ratio *ρ* of the initial raman tensor and the final mueller matrix. The monte-carlo-simulation may not change the depolarisation ratio. The depolarisation ratio is calculated in two different ways. Both are described by Richard N. Zare in "Angular Momentum" (ISBN 0-471-85892-7), p. 129. The depolarisation ratio of the initial raman tensor is calculated by determining its eigenvalues. The eigenvalues are used to get the anisotropic and isotropic part of the polarisability. Theses two measures are combined into the depolarisation ratio of the molecule. The depolarisation ratio of the final mueller matrix is calculated by comparing the light polarisation before and after the raman scattering process.
 
 ## Usage
 
-The conversion is started by typing `polaram convert PATH_TO_TENSOR_FILE`. The command `polaram convert -h` echos a help text. This command prints the following output:
+The conversion is started by typing `python3 -m PolaRam convert PATH_TO_TENSOR_FILE`. The command `python3 -m PolaRam convert -h` echos a help text. This command prints the following output:
 ```
-$ polaram convert -h
+$ python3 -m PolaRam convert -h
 usage: polaram convert [-h] [-v] [-l LOGFILE] [-i ITERATIONLIMIT]
                        [-o OUTPUTFILE] [-c [COMMENT [COMMENT ...]]]
                        [-p PROCESSCOUNT] [-s CHUNKSIZE] [-t THRESHOLD]
@@ -228,9 +233,9 @@ The input file for the `convert` sub-program is the same as the format of the [r
 The program will read a LOG-file created by Gaussian's freqency calculations. Other programs are not supported. The code can be adjusted if needed, but it is not planned to do so. The program was only tested for Gaussian16 output, but other versions of Gaussian should propably work. Details are given in the section [The Input File](#the-input-file-1). It will also read the meta data at the beginning and the frequencies of the vibrational modes. These information will be added to the output file. More over the program will check if Gaussian marked the frequencies with a `-`-sign to make sure that the structure of the molecule was optimised before performing the frequency analysis.
 
 ## Usage
-The conversion is started by typing `polaram extract PATH_TO_LOG_FILE`. The command `polaram extract -h` echos a help text. This command prints the following output:
+The conversion is started by typing `python3 -m PolaRam extract PATH_TO_LOG_FILE`. The command `python3 -m PolaRam extract -h` echos a help text. This command prints the following output:
 ```
-$ polaram extract -h
+$ python3 -m PolaRam extract -h
 usage: polaram extract [-h] [-v] [-l LOGFILE] [-o OUTPUTFILE]
                        [-c [COMMENT [COMMENT ...]]]
                        gaussianfile
@@ -265,7 +270,7 @@ The program supports only Gaussian LOG-files and it's only been tested in Gaussi
 + The `FREQUENCY_KEYWORD` marks all rows in the file's summary table containing the frequencies of the vibrational modes. They will be added to the raman tensors as descriptive title. `FREQUENCY_KEYWORD = 'Frequencies -- '`.
 + The `METADATA_KEYWORD` marks the beginning of the meta data. Gaussian adds information about the used calculation method, basis set and more to the LOG-file.  The program adds these information to the output file. `METADATA_KEYWORD = "******************************************\n Gaussian"`.
 
-An example of files the `extract` can process are given in the [gaussian](gaussian/) directory. Following example shows how the output file is generated from the input file. The number of the vibrational mode and its frequency are included in the description of each tensor.
+An example of files the `extract` can process are given in the [gaussian](data/exampleGaussianLogs/) directory. Following example shows how the output file is generated from the input file. The number of the vibrational mode and its frequency are included in the description of each tensor.
 
 Extract from input file:
 ```
@@ -364,4 +369,4 @@ $ polaram extract gaussian/WATER.LOG
 
 `SetupDecoder.py` and `utilities.py` contain code that is used by the commands discussed above. The `SetupDecoder` is a class that is only used by the `simulate` command. Its purpose is to convert an instruction from the [input file](#instruction-file) into a mueller matrix. It uses a dictionary to look a given instruction up and calls the corresponding function. The functions will create the mueller matrices from templates by using the arguments passed with the instruction. The returned results will be passed to the `simulate` program, which in return will pass a new instruction to the `SetupDecoder`.
 
-The `utilities` module contains a more varied assembly of functions. This module is used by all other python scripts for various applications. There are functions defining new data types for the command line interface argparse. These functions enable the cli to parse text as valid file paths, positive integers or interpret a list of strings as a single sentences. Furthermore there are functions to convert a raman tensor into a mueller matrix. The mathematical details are given in a seperate [pdf-file](./ramanMuellerMatrix.pdf). Reading and parsing the content of files is also implemented in this module. Text files can be read and interpreted as input files for the sub-programs or as gaussian .LOG-file.
+The `utilities` module contains a more varied assembly of functions. This module is used by all other python scripts for various applications. There are functions defining new data types for the command line interface argparse. These functions enable the cli to parse text as valid file paths, positive integers or interpret a list of strings as a single sentences. Furthermore there are functions to convert a raman tensor into a mueller matrix. The mathematical details are given in a seperate [pdf-file](./info/ramanMuellerMatrix.pdf). Reading and parsing the content of files is also implemented in this module. Text files can be read and interpreted as input files for the sub-programs or as gaussian .LOG-file.

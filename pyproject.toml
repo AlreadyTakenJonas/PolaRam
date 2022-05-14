@@ -1,0 +1,20 @@
+[project]
+name = "PolaRam"
+dynamic = ["version"]
+dependencies = [
+    "pathlib",
+    "numpy",
+    "argparse",
+    "tqdm"
+]
+authors = [
+    {name = "Jonas Eichhorn", email = "eichhorn.jonas@uni-jena.de"},
+]
+readme = "README.md"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "PolaRam.version.__version__"}

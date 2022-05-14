@@ -7,7 +7,7 @@ import unittest
 import types
 
 # Import class that shall be tested and create an instance of it
-import utilities as util
+from .. import utilities as util
 
 #
 #   EXTERNAL LIBARIES
@@ -225,3 +225,7 @@ class TestUtilities_BuildRamanMuellerMatrix(unittest.TestCase):
                         correct_output = correct_matrix(xx, xy, yx, yy)
 
                         np.testing.assert_array_almost_equal(test_output, correct_output)
+
+# Run the tests
+if __name__ == '__main__':
+    unittest.main()

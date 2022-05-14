@@ -30,8 +30,8 @@ from tqdm import tqdm
 #
 #   INTERNAL MODULES
 #
-import SetupDecoder as SetDec
-import utilities as util
+from . import SetupDecoder as SetDec
+from . import utilities as util
 
 #
 # MAIN PROGRAM

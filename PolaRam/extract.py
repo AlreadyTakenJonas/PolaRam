@@ -17,7 +17,7 @@ import numpy as np
 #
 #   INTERNAL MODULES
 #
-import utilities as util
+from . import utilities as util
 
 #
 #   MARKOS
