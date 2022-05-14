@@ -6,8 +6,6 @@ The program needs a file with instructions and a file with the raman tensors of 
 
 The sub-program carrying out the simulation is called `simulate`. There are two more sub-programs helping with data and file conversion: `convert` and `extract`. More information below.
 
-### How to cite
-J. Eichhorn, *PolaRam*, Version v3.0.0, Jena, 2022.
 
 Table of Contents
 =================
