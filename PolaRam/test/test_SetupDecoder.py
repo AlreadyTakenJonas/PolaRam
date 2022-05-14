@@ -515,7 +515,7 @@ class TestSetupDecoder_Decode(unittest.TestCase):
         """
         Make sure type error are raised if necessary
         """
-
+                
         self.assertRaises(TypeError, SetupDecoder.decode, 1)
         self.assertRaises(TypeError, SetupDecoder.decode, 1.0)
         self.assertRaises(TypeError, SetupDecoder.decode, True)
@@ -527,3 +527,8 @@ class TestSetupDecoder_Decode(unittest.TestCase):
         for line in self.typeErrorInput:
             with self.assertRaises(TypeError, msg = "No error while testing SetupDecoder.decode('" + line + "')"):
                 SetupDecoder.decode(line)
+
+
+# Run the tests
+if __name__ == '__main__':
+    unittest.main()
